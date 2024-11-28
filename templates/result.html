@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We found you a new laptop!</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+        }
+        .content {
+            flex: 1;
+        }
+        .table-container {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .top-five-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .top-five-table th, .top-five-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .top-five-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Laptop Comparison</h1>
+        <p>The closest matching laptop is: <strong>{{ laptop_name }}</strong></p>
+        <p>Here is the comparison between your ideal laptop and the suggested one:</p>
+        <img src="{{ chart_path }}" alt="Spider Chart">
+        <a href="/">Go Back</a>
+    </div>
+    <div class="table-container">
+        <h2>Top 5 Laptops</h2>
+        {{ top_five_table|safe }}
+    </div>
+</body>
+</html>
