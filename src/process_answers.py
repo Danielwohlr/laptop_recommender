@@ -75,11 +75,16 @@ def compute_closest_laptop(
         axis = 1
     )
 
-
-    top_five = laptop_db.loc[distances.nsmallest(5).index]
+    top_five_idx = distances.nsmallest(5).index
+    top_five_distances = distances.loc[top_five_idx]
+    top_five_laptops = laptop_db.loc[top_five_idx]
     
-    laptop_name = top_five.iloc[0]['id']
+    laptop_name = top_five_laptops.iloc[0]['id']
     
-    closest_laptop = top_five.iloc[0]
+    closest_laptop = top_five_laptops.iloc[0]
+    closest_laptop_df = pd.DataFrame(closest_laptop).T
 
-    return closest_laptop, laptop_name, top_five
+    top_table = pd.concat([top_five_laptops['id'],top_five_distances],axis=1)
+    top_table.columns = ['id','dist']
+
+    return closest_laptop_df, laptop_name, top_table

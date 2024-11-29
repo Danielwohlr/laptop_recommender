@@ -82,7 +82,7 @@ def concat_new_old_laptop(
     comparison_closest_mine.columns = comparison_closest_mine.iloc[0]  # Use the first row as the header
     comparison_closest_mine = comparison_closest_mine[1:]
 
-    return comparison_closest_mine
+    return comparison_closest_mine.T
 
 def plot_spider_chart(
         new_laptop: pd.DataFrame,
@@ -94,18 +94,21 @@ def plot_spider_chart(
     """
     df = concat_new_old_laptop(new_laptop, my_laptop)
 
-    # Number of variables, -1 because of id
-    num_vars = len(df.index) - 1 
+    # Number of metrics
+    num_vars = df.shape[1]
     theta = radar_factory(num_vars, frame='polygon')
 
     # Extract data for the radar chart
-    spoke_labels = df.index[1:]
-    values_new_laptop = df.iloc[1:].values
-    values_my_laptop = df.iloc[1:].values
+    spoke_labels = df.columns
+    values_new_laptop = df.iloc[0,:].values # first row
+    values_my_laptop = df.iloc[1,:].values # second row
 
     # Radar chart
     fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(projection='radar'))
     ax.set_varlabels(spoke_labels)
+    for label in ax.get_xticklabels():
+        if label.get_text() in ['Storage space', 'Battery Life', 'Camera Quality', 'Indestructibility']:
+            label.set_position((label.get_position()[0], label.get_position()[1] - 0.1))
 
     # Plot each dataset
     ax.plot(theta, values_new_laptop, label='Suggested Laptop', color='blue', linewidth=2)
@@ -118,7 +121,7 @@ def plot_spider_chart(
 
 
     # Add title and legend
-    ax.set_title('Laptop Comparison Radar Chart', weight='bold', size=16, position=(0.5, 1.1))
+    ax.set_title('Laptop Comparison', weight='bold', size=16, position=(0.5, 1.2))
     ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
 
     # Save the figure to a file
