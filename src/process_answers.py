@@ -83,8 +83,15 @@ def compute_closest_laptop(
     
     closest_laptop = top_five_laptops.iloc[0]
     closest_laptop_df = pd.DataFrame(closest_laptop).T
-
-    top_table = pd.concat([top_five_laptops['id'],top_five_distances],axis=1)
-    top_table.columns = ['id','dist']
+    top_five_similarities = compute_similarity(top_five_distances)
+    top_table = pd.concat([top_five_laptops['id'],top_five_similarities],axis=1)
+    top_table.columns = ['Laptop','Rating']
 
     return closest_laptop_df, laptop_name, top_table
+
+def compute_similarity(
+        dist: pd.DataFrame,
+        scale: float = 0.01
+    ):
+    sim = 1/(1+dist*scale)
+    return sim
